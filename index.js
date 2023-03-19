@@ -16,34 +16,21 @@ function displayNumber(number){
         lastNumber = '0' + number;
         output.innerHTML += lastNumber;
         console.log(lastNumber);
-        if(checkOperate || number === '0')
-        {
-            return;
-        }
     }
     else{
       lastNumber += number;
       output.innerHTML = output.innerHTML === '0'?number: output.innerHTML + number;
-      console.log(lastNumber);
-      if(checkOperate || number === '0')
-        {
-          return;
-        }     
-      if(number === '.'){
-        checkOperate = false;
-        }
-      else{
-      checkOperate = !checkOperate;
-      }
+      console.log(lastNumber);   
+      checkOperate = true;
     }   
 }
 
 function displayOperation (operationValue){
-  if(checkOperate){
-  let output = document.querySelector('.output');
-  output.innerHTML = output.innerHTML === '0'?output.innerHTML:output.innerHTML + operationValue;
-  checkOperate = !checkOperate;
-  lastNumber = '';
+  if(checkOperate && lastNumber.charAt(lastNumber.length - 1) !== '.'){
+      let output = document.querySelector('.output');
+      output.innerHTML = output.innerHTML === '0'?output.innerHTML:output.innerHTML + operationValue;
+      checkOperate = !checkOperate;
+      lastNumber = '';
   }else{
   return;
   }
@@ -118,7 +105,7 @@ function operate(){
     let checkFirstNumber = true;
     let operations = ['×','/','+','-']; 
     for(let i=0;i<operation.length;i++){
-      if(operations.some(k => operation.charAt(i).includes(k))){
+      if(operations.includes(operation.charAt(i))){
         if(!checkFirstNumber){
         switch (lastOperation) {
           case '+':
@@ -156,16 +143,16 @@ function operate(){
     } 
     switch (lastOperation) {
           case '+':
-            result +=  parseFloat(newNumber);
+            result =  add(result, parseFloat(newNumber));
             break;
           case '-':
-            result -= parseFloat(newNumber);
+            result = sub(result, parseFloat(newNumber));
             break;
           case '×':
-            result *= parseFloat(newNumber);
+            result = multiply(result, parseFloat(newNumber));
             break;
           case '/':
-            result /= parseFloat(newNumber);
+            result = divide(result, parseFloat(newNumber));
          }
     let output = document.querySelector('.result');
     if(isNaN(result)){
